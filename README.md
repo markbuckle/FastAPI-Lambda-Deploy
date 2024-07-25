@@ -1,8 +1,15 @@
-# FastAPI Tutorial
+# FastAPI & AWS Lambda Tutorial
 
-This is a simple example FastAPI application that pretends to be a bookstore.
+In this project you'll learn how to deploy your FastAPI on AWS Lambda so you can host it serverlessly and not have to stress about server maintenance. This is a simple example FastAPI application that pretends to be a bookstore.
 
-# Deploying to AWS EC2
+Server based hosting with AWS EC2 is hard to scale out with traffic increases, difficult to do rolling updates for an app, hard to do security patching, and it's quiet expensive. 
+
+AWS Lambda is a serverless compute for hosting APIs. Lambda takes care of all of the scaling, security, hosting and load balancing problems. Serverless hosting is scalable, cheap and requires low maintenance.
+
+## FastAPI
+An Application Programming Interface (API) is an interface between your service and the rest of the world (users). Requesting a ride from Uber, booking an Airbnb, or tweeting on X are all examples of APIs in action.
+
+## Deploying to AWS EC2
 
 Log into your AWS account and create an EC2 instance (`t2.micro`), using the latest stable
 Ubuntu Linux AMI.
@@ -86,3 +93,7 @@ Now add our FastAPI file and the JSON file.
 zip lambda_function.zip -u main.py
 zip lambda_function.zip -u books.json
 ```
+
+Tutorial videos:
+1) [FastAPI Python Tutorial - Learn How to Build a REST API](https://www.youtube.com/watch?v=34cqrIp5ANg)
+2) [Deploy FastAPI on AWS Lambda ⚡ Serverless hosting!](https://www.youtube.com/watch?v=RGIM4JfsSk0)
