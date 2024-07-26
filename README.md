@@ -1,73 +1,51 @@
 # FastAPI & AWS Lambda Tutorial
 
-In this project you'll learn how to deploy your FastAPI on AWS Lambda so you can host it serverlessly and not have to stress about server maintenance. This is a simple example FastAPI application that pretends to be a bookstore.
-
-Server based hosting with AWS EC2 is hard to scale out with traffic increases, difficult to do rolling updates for an app, hard to do security patching, and it's quiet expensive. 
-
-AWS Lambda is a serverless compute for hosting APIs. Lambda takes care of all of the scaling, security, hosting and load balancing problems. Serverless hosting is scalable, cheap and requires low maintenance.
+In this project, we'll be creating an application using FastAPI. APIs are the backbone of internet services, and I think that the FastAPI framework (released in 2018) is one of the best ways for Python users to easily make custom APIs with high performance. After that you'll learn how to deploy your FastAPI on AWS Lambda so you can host it serverlessly and not have to stress about server maintenance. This is a simple example FastAPI application that pretends to be a bookstore. Server based hosting with AWS EC2 is hard to scale out with traffic increases, difficult to do rolling updates for an app, hard to do security patching, and it's quiet expensive. AWS Lambda is a serverless compute for hosting APIs. Lambda takes care of all of the scaling, security, hosting and load balancing problems. Serverless hosting is scalable, cheap and requires low maintenance.
 
 ## FastAPI
 An Application Programming Interface (API) is an interface between your service and the rest of the world (users). Requesting a ride from Uber, booking an Airbnb, or tweeting on X are all examples of APIs in action.
 
-## Deploying to AWS EC2
+### Install FastAPI
 
-Log into your AWS account and create an EC2 instance (`t2.micro`), using the latest stable
-Ubuntu Linux AMI.
-
-[SSH into the instance](https://aws.amazon.com/blogs/compute/new-using-amazon-ec2-instance-connect-for-ssh-access-to-your-ec2-instances/) and run these commands to update the software repository and install
-our dependencies.
-
-```bash
-sudo apt-get update
-sudo apt install -y python3-pip nginx
+Install [FastAPI](https://fastapi.tiangolo.com/#installation) by running:
+```sh
+pip install fastapi
 ```
+Use the [Create It example](https://fastapi.tiangolo.com/#create-it) to start a main.py file
 
-Clone the FastAPI server app (or create your `main.py` in Python).
-
-```bash
-git clone https://github.com/pixegami/fastapi-tutorial.git
+### Run FastAPI
+Run the server with:
+```sh
+fastapi dev main.py
 ```
+### Create a Database
+Create a fake database with a global variable (i.e. BOOK_DATABASE = [])
 
-Add the FastAPI configuration to NGINX's folder. Create a file called `fastapi_nginx` (like the one in this repository).
+### Data models with JSON
+import BaseModel from pydantic library which is already installed as it is a part of fastapi
 
-```bash
-sudo vim /etc/nginx/sites-enabled/fastapi_nginx
+### Building APIs
+Play around with different API interfaces and check http://127.0.0.1:8000/docs#/ to see a summary of each API method
+
+Examples:
+#### GET methods:
+1. "/" - Create a home index method that runs a simple health check
+2. "/list-books" - returns a list of all the books existing in our database
+3. "/book-by-index/{index}" - find a book by index #. Out of range will return an error message
+4. "/get-random-book" - return a random book in database
+5. "/get-book" - search a book by id
+
+#### POST methods:
+6. "/add-book" - input into FastAPI will add a book to your database 
+
+### Using Mangum to adapt the app
+Magnum is an adapter for running ASGI applications in AWS Lambda to handle function URL, API Gateway, and more. 
+
+Install Magnum:
+```sh
+pip install magnum
 ```
-
-And put this config into the file (replace the IP address with your EC2 instance's public IP):
-
-```
-server {
-    listen 80;   
-    server_name <YOUR_EC2_IP>;    
-    location / {        
-        proxy_pass http://127.0.0.1:8000;    
-    }
-}
-```
-
-
-Start NGINX.
-
-```bash
-sudo service nginx restart
-```
-
-Start FastAPI.
-
-```bash
-cd fastapi-tutorial
-python3 -m uvicorn main:app
-```
-
-Update EC2 security-group settings for your instance to allow HTTP traffic to port 80.
-
-Now when you visit your public IP of the instance, you should be able to access your API.
-
-# Deploying FastAPI to AWS Lambda
-
-We'll need to modify the API so that it has a Lambda handler. Use Mangum:
-
+Wrap your entire app with a Mangum handler:
 ```python
 from mangum import Mangum
 
@@ -75,16 +53,20 @@ app = FastAPI()
 handler = Mangum(app)
 ```
 
+### Deploying FastAPI to AWS Lambda
 We'll also need to install the dependencies into a local directory so we can zip it up.
 
 ```bash
 pip install -t lib -r requirements.txt
 ```
 
-We now need to zip it up.
-
-```bash
-(cd lib; zip ../lambda_function.zip -r .)
+Change directory to the library folder:
+```pwsh
+cd lib
+```
+We now need to zip it up:
+```pwsh
+Compress-Archive -Path . -DestinationPath ../lambda_function.zip
 ```
 
 Now add our FastAPI file and the JSON file.
@@ -93,7 +75,6 @@ Now add our FastAPI file and the JSON file.
 zip lambda_function.zip -u main.py
 zip lambda_function.zip -u books.json
 ```
-
 Tutorial videos:
 1) [FastAPI Python Tutorial - Learn How to Build a REST API](https://www.youtube.com/watch?v=34cqrIp5ANg)
 2) [Deploy FastAPI on AWS Lambda ⚡ Serverless hosting!](https://www.youtube.com/watch?v=RGIM4JfsSk0)
