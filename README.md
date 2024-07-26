@@ -56,7 +56,7 @@ handler = Mangum(app)
 ### Deploying FastAPI to AWS Lambda
 We'll also need to install the dependencies into a local directory so we can zip it up.
 
-```bash
+```pwsh
 pip install -t lib -r requirements.txt
 ```
 
@@ -71,9 +71,9 @@ Compress-Archive -Path . -DestinationPath ../lambda_function.zip
 
 Now add our FastAPI file and the JSON file.
 
-```bash
-zip lambda_function.zip -u main.py
-zip lambda_function.zip -u books.json
+```pwsh
+Compress-Archive -Path . -DestinationPath lambda_function.zip -u main.py
+Compress-Archive -Path . -DestinationPath lambda_function.zip -u books.json
 ```
 Tutorial videos:
 1) [FastAPI Python Tutorial - Learn How to Build a REST API](https://www.youtube.com/watch?v=34cqrIp5ANg)
