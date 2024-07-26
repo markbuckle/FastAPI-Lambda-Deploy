@@ -66,7 +66,8 @@ cd lib
 ```
 We now need to zip it up:
 ```pwsh
-Compress-Archive -Path . -DestinationPath ../lambda_function.zip
+Compress-Archive -Path * -DestinationPath ../lambda_function.zip
+
 ```
 Change directory back to the project folder:
 ```pwsh
