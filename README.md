@@ -72,8 +72,8 @@ Compress-Archive -Path . -DestinationPath ../lambda_function.zip
 Now add our FastAPI file and the JSON file.
 
 ```pwsh
-Compress-Archive -Path . -DestinationPath lambda_function.zip -u main.py
-Compress-Archive -Path . -DestinationPath lambda_function.zip -u books.json
+Compress-Archive -Path main.py -Update -DestinationPath lambda_function.zip
+Compress-Archive -Path books.json -Update -DestinationPath lambda_function.zip
 ```
 Tutorial videos:
 1) [FastAPI Python Tutorial - Learn How to Build a REST API](https://www.youtube.com/watch?v=34cqrIp5ANg)
