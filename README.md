@@ -68,7 +68,10 @@ We now need to zip it up:
 ```pwsh
 Compress-Archive -Path . -DestinationPath ../lambda_function.zip
 ```
-
+Change directory back to the project folder:
+```pwsh
+cd ..
+```
 Now add our FastAPI file and the JSON file.
 
 ```pwsh
